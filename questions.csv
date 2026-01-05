@@ -1,0 +1,97 @@
+id;question;reponse1;reponse2;reponse3;bonne_reponse;theme;difficulte
+1;Combien font 4 + 5 ?;9;8;10;1;maths;facile
+2;Combien font 10 - 3 ?;6;7;8;2;maths;facile
+3;Combien font 6 + 8 ?;12;14;13;2;maths;facile
+4;Combien font 12 - 7 ?;6;5;4;2;maths;facile
+5;Combien font 3 x 4 ?;12;9;15;1;maths;facile
+6;Combien font 2 x 5 ?;10;8;12;1;maths;facile
+7;Combien font 20 + 10 ?;25;30;35;2;maths;facile
+8;Combien font 15 - 5 ?;10;12;8;1;maths;facile
+9;Combien font 7 x 6 ?;42;36;48;1;maths;moyen
+10;Combien font 48 + 26 ?;74;72;76;1;maths;moyen
+11;Combien font 90 - 37 ?;53;57;50;1;maths;moyen
+12;Combien font 8 x 9 ?;72;64;81;1;maths;moyen
+13;Combien font 120 - 45 ?;75;70;80;1;maths;moyen
+14;Combien font 6 x 8 ?;48;42;54;1;maths;moyen
+15;Combien font 63 + 19 ?;82;81;83;1;maths;moyen
+16;Combien font 100 - 28 ?;72;70;74;1;maths;moyen
+17;Combien font 12 x 8 ?;96;88;108;1;maths;difficile
+18;Combien font 144 / 12 ?;12;11;14;1;maths;difficile
+19;Combien font 25 x 4 ?;100;90;80;1;maths;difficile
+20;Combien font 96 / 8 ?;12;14;10;1;maths;difficile
+21;Combien font 18 x 6 ?;108;112;102;1;maths;difficile
+22;Combien font 150 - 67 ?;83;87;80;1;maths;difficile
+23;Combien font 45 x 2 ?;90;85;100;1;maths;difficile
+24;Combien font 200 / 10 ?;20;25;15;1;maths;difficile
+25;Quel est le sujet dans la phrase : "Le chat dort" ?;Le chat;dort;la souris;1;francais;facile
+26;Quel est le verbe dans la phrase : "Il mange une pomme" ?;mange;Il;une pomme;1;francais;facile
+27;Combien y a-t-il de syllabes dans le mot "maison" ?;2;3;1;1;francais;facile
+28;Quel est le féminin de "petit" ?;petite;petit;petits;1;francais;facile
+29;Quel est le pluriel de "cheval" ?;chevaux;chevals;chevalles;1;francais;facile
+30;Quel est le contraire de "grand" ?;petit;mince;court;1;francais;facile
+31;Quel est le déterminant dans la phrase : "Le chien court" ?;Le;chien;court;1;francais;facile
+32;Quel est le pluriel de "livre" ?;livres;livre;livrons;1;francais;facile
+33;Quelle est la nature du mot "rapidement" ?;adverbe;adjectif;verbe;1;francais;moyen
+34;Quel est le temps du verbe "mangeait" ?;imparfait;passé composé;futur;1;francais;moyen
+35;Quel est le sujet dans : "Nous jouons dehors" ?;Nous;jouons;dehors;1;francais;moyen
+36;Quel est le synonyme de "content" ?;heureux;triste;fâché;1;francais;moyen
+37;Quel est le contraire de "difficile" ?;facile;simple;compliqué;1;francais;moyen
+38;Quel est le verbe dans : "Ils courent vite" ?;courent;Ils;vite;1;francais;moyen
+39;Quel est le féminin d'un "acteur" ?;actrice;acteure;acteurs;1;francais;moyen
+40;Quel est le pluriel d'un "animal" ?;animaux;animal;animales;1;francais;moyen
+41;Quelle est la nature du mot "courageux" ?;adjectif;nom;verbe;1;francais;difficile
+42;Quel est le temps du verbe "avait mangé" ?;plus-que-parfait;passé composé;imparfait;1;francais;difficile
+43;Quel est le complément d'objet dans : "Il lit un livre" ?;un livre;Il;lire;1;francais;difficile
+44;Quel est le contraire d'"inutile" ?;utile;important;valable;1;francais;difficile
+45;Quel est le synonyme de "rapide" ?;vite;lent;lentement;1;francais;difficile
+46;Quelle est la nature du mot "maison" ?;nom;verbe;adjectif;1;francais;difficile
+47;Quel est le pluriel de "journal" ?;journaux;journals;journale;1;francais;difficile
+48;Quel est le verbe dans : "La pluie tombe fort" ?;tombe;pluie;fort;1;francais;difficile
+49;Qui était roi de France pendant la Révolution ?;Louis XVI;Louis XV;Napoléon;1;histoire;facile
+50;En quelle année commence la Révolution française ?;1789;1790;1776;1;histoire;facile
+51;Qui a découvert l'Amérique en 1492 ?;Christophe Colomb;Vasco de Gama;Marco Polo;1;histoire;facile
+52;Dans quel pays se trouvent les pyramides de Gizeh ?;Égypte;Grèce;Italie;1;histoire;facile
+53;Comment s'appelle la période des châteaux forts ?;Moyen Âge;Renaissance;Antiquité;1;histoire;facile
+54;Qui était le premier empereur des Français ?;Napoléon Bonaparte;Louis XIV;Charlemagne;1;histoire;facile
+55;Quel était le nom de la France à l'époque des Gaulois ?;La Gaule;Rome;Espagne;1;histoire;facile
+56;Comment s'appellent les habitants de la Rome antique ?;Les Romains;Les Romulus;Les Romains;1;histoire;facile
+57;En quelle année a eu lieu la prise de la Bastille ?;1789;1790;1776;1;histoire;moyen
+58;Qui était Jeanne d'Arc ?;Une héroïne française;Une reine;Une guerrière anglaise;1;histoire;moyen
+59;Quel peuple a construit les pyramides ?;Les Égyptiens;Les Romains;Les Grecs;1;histoire;moyen
+60;Quel roi a fait construire le château de Versailles ?;Louis XIV;Louis XVI;Henri IV;1;histoire;moyen
+61;Quelle guerre a eu lieu de 1914 à 1918 ?;Première Guerre mondiale;Seconde Guerre mondiale;Guerre de Cent Ans;1;histoire;moyen
+62;Qui était Charlemagne ?;Un empereur;Un roi;Un général;1;histoire;moyen
+63;Quel était le nom de Paris à l'époque gallo-romaine ?;Lutèce;Paris;Marseille;1;histoire;moyen
+64;Quel groupe social vivait dans les châteaux forts ?;Les seigneurs;Les paysans;Les rois;1;histoire;moyen
+65;En quelle année Napoléon est-il devenu empereur ?;1804;1810;1799;1;histoire;difficile
+66;Quel était le nom de Paris dans l'Antiquité ?;Lutèce;Parvis;Lutétia;1;histoire;difficile
+67;Quel peuple a envahi la Gaule au Ve siècle ?;Les Francs;Les Gaulois;Les Vikings;1;histoire;difficile
+68;Comment s'appelle le régime politique avant 1789 ?;La monarchie absolue;La République;L'Empire;1;histoire;difficile
+69;Qui était le roi des Francs baptisé à Reims ?;Clovis;Charlemagne;Louis XVI;1;histoire;difficile
+70;Quelle période historique suit le Moyen Âge ?;Les Temps modernes;La Renaissance;L'Antiquité;1;histoire;difficile
+71;Qui a signé l'Édit de Nantes en 1598 ?;Henri IV;Louis XIV;Napoléon;1;histoire;difficile
+72;Quelle guerre oppose Français et Anglais au Moyen Âge ?;La guerre de Cent Ans;Première Guerre mondiale;Guerre de Troie;1;histoire;difficile
+73;Comment dit-on "bonjour" en anglais ?;Hi;Hello;Hey;2;anglais;facile
+74;Comment dit-on "merci" en anglais ?;Thank;Thanks;Thank you;3;anglais;facile
+75;Comment dit-on "chat" en anglais ?;Cat;Dog;Rat;1;anglais;facile
+76;Comment dit-on "chien" en anglais ?;Dog;Cat;Puppy;1;anglais;facile
+77;Comment dit-on "rouge" en anglais ?;Red;Blue;Green;1;anglais;facile
+78;Comment dit-on "bleu" en anglais ?;Blue;Red;Yellow;1;anglais;facile
+79;Comment dit-on "un" en anglais ?;One;Two;Three;1;anglais;facile
+80;Comment dit-on "manger" en anglais ?;To eat;To drink;To play;1;anglais;facile
+81;Comment dit-on "école" en anglais ?;School;House;Classroom;1;anglais;moyen
+82;Comment dit-on "maison" en anglais ?;House;Home;Building;1;anglais;moyen
+83;Comment dit-on "jouer" en anglais ?;To play;To work;To run;1;anglais;moyen
+84;Comment dit-on "livre" en anglais ?;Book;Paper;Story;1;anglais;moyen
+85;Comment dit-on "courir" en anglais ?;To run;To walk;To jump;1;anglais;moyen
+86;Comment dit-on "parler" en anglais ?;To speak;To listen;To say;1;anglais;moyen
+87;Comment dit-on "jaune" en anglais ?;Yellow;Red;Green;1;anglais;moyen
+88;Comment dit-on "noir" en anglais ?;Black;White;Grey;1;anglais;moyen
+89;Comment dit-on "apprendre" en anglais ?;To learn;To study;To teach;1;anglais;difficile
+90;Comment dit-on "travailler" en anglais ?;To work;To play;Job;1;anglais;difficile
+91;Comment dit-on "toujours" en anglais ?;Always;Never;Often;1;anglais;difficile
+92;Comment dit-on "jamais" en anglais ?;Never;Always;Rarely;1;anglais;difficile
+93;Comment dit-on "rapidement" en anglais ?;Quickly;Slowly;Fast;1;anglais;difficile
+94;Comment dit-on "lentement" en anglais ?;Slowly;Quickly;Gradually;1;anglais;difficile
+95;Comment dit-on "pourquoi" en anglais ?;Why;Because;What;1;anglais;difficile
+96;Comment dit-on "parce que" en anglais ?;Because;So;Why;1;anglais;difficile
