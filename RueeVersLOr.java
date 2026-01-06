@@ -15,16 +15,38 @@ class RueeVersLOr extends Program{
     final char EST = 'd';
     final char SORTIE = 'x';
 
+    int SCORE;
+
     void algorithm(){
-        afficherCombat();
-        int[][] monde = generationMonde();
-        afficher(monde);
-        int[] position = positionJoueur(monde);
-        int[][] newmonde = mouvement('s',position[0],position[1],monde);
-        afficher(newmonde);
+
     }
-    //regarde tp12 pour les File
     
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////  -/MENU/-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    void menu(){
+        afficherMenu();
+        choixMenu();
+    }
+    void choixMenu(){
+        boolean valide = false;
+        char choix = ' ';
+        while(!valide){
+            choix = readChar();
+            if(choix == '1'){
+                //redirige vers la run
+            }else if(choix == '2'){
+                //redirige vers le marchand
+            }else if(choix == '3'){
+                //affiche le leaderboard
+            }else if(choix == '4'){
+                //vers quitter
+            }
+
+        }
+    }
+
     void dump(File file){
         int nblignes = 0;
         while(ready(file)){
@@ -202,9 +224,11 @@ class RueeVersLOr extends Program{
 ////    -/Système de Combat/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    int InitialisationMonstre(){
-        int pv = 0;
-        return pv;
+    int MONSTREPV;
+    int COWBOYPV;
+
+    void InitialisationPV(){
+        MONSTREPV = 10;
     }
     void afficherCombat(){
         File combat = newFile("resources/combat.txt");
