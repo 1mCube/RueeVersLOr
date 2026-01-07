@@ -9,39 +9,51 @@ class RueeVersLOr extends Program{
     final int COFFRE = 4;
     final int BONUS = 5;
 
-    final char NORD = 'z';
-    final char SUD = 's';
-    final char OUEST = 'q';
-    final char EST = 'd';
-    final char SORTIE = 'x';
+    final String NORD = "z";
+    final String SUD = "s";
+    final String OUEST = "q";
+    final String EST = "d";
+    final String SORTIE = "x";
 
     int SCORE;
+    int monde[][];
 
     void algorithm(){
+        //connection
+        menu();
+    }
 
+    void clear(){
+        print("\033[H\033[2J");
     }
     
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////  -/MENU/-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////      -/MENU/-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     void menu(){
+        clear();
         afficherMenu();
         choixMenu();
     }
     void choixMenu(){
         boolean valide = false;
-        char choix = ' ';
+        int choix;
         while(!valide){
-            choix = readChar();
-            if(choix == '1'){
-                //redirige vers la run
-            }else if(choix == '2'){
+            choix = readInt();
+            if(choix == 1){
+                monde = generationMonde();
+                monde();
+                valide = true;
+            }else if(choix == 2){
                 //redirige vers le marchand
-            }else if(choix == '3'){
+                valide = true;
+            }else if(choix == 3){
                 //affiche le leaderboard
-            }else if(choix == '4'){
+                valide = true;
+            }else if(choix == 4){
                 //vers quitter
+                valide = true;
             }
 
         }
@@ -59,35 +71,73 @@ class RueeVersLOr extends Program{
         dump(menu);
     }
 
-    char saisie(int monde[][],int[] position){
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////   -/Initialisation du monde/-   /////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    void monde(){
+    	boolean modeCombat = false;
+        clear();
+        afficher(monde);
+        while(!modeCombat){
+            int[] pos = positionJoueur(monde);
+            String coup = saisie(monde,pos);
+            if(equals(coup,NORD)){
+                if(pos[0]>0 && monde[pos[0]-1][pos[1]] == MONSTRE){
+                    modeCombat = true;
+                }
+            }if(equals(coup,SUD)){
+                if(pos[0]<length(monde,1)-1 && monde[pos[0]+1][pos[1]] == MONSTRE){
+                    modeCombat = true;
+                }
+            }if(equals(coup,OUEST)){
+                if(pos[1]>0 && monde[pos[0]][pos[1]-1] == MONSTRE){
+                    modeCombat = true;
+                }
+            }if(equals(coup,EST)){
+                if(pos[1]<length(monde,2)-1 && monde[pos[0]][pos[1]+1] == MONSTRE){
+                    modeCombat = true;
+                }
+            }else{mouvement(coup,pos[0],pos[1],monde);
+            clear();
+            afficher(monde);}
+        }
+        if(modeCombat){
+            combat();
+        }
+    }
+
+    String saisie(int monde[][],int[] position){
+        int positionX = position[0];
+        int positionY = position[1];
         boolean valide = false;
-        char coup = ' ';
+        String coup = "";
         while(!valide){
-            coup = readChar();
-            if(coup == NORD){
-                if(position[0] != 0){
+            coup = readString();
+            if(equals(coup,NORD)){
+                if(position[0] != 0 && monde[positionX-1][positionY] != MURS){
                     valide = true;
                 }
-            }if(coup == SUD){
-                if(position[0] != length(monde,1)){
+            }if(equals(coup,SUD)){
+                if(position[0] != length(monde,1) && monde[positionX+1][positionY] != MURS){
                     valide = true;
                 }
-            }if(coup == OUEST){
-                if(position[1] != 0){
+            }if(equals(coup,OUEST)){
+                if(position[1] != 0 && monde[positionX][positionY-1] != MURS){
                     valide = true;
                 }
-            }if(coup == EST){
-                if(position[1] != length(monde,2)){
+            }if(equals(coup,EST)){
+                if(position[1] != length(monde,2) && monde[positionX][positionY+1] != MURS){
                     valide = true;
                 }
+            }if(equals(coup,SORTIE)){
+                menu();
+                valide = true;
             }
         }
         return coup;
     }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////   -/Initialisation du monde/-   /////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     int[][] generationMonde(){
         int[][] monde = new int[7][10];
         double monstre = 0.1;
@@ -106,26 +156,26 @@ class RueeVersLOr extends Program{
                 }else{monde[c][l] = VIDE;}
             }
         }
-        monde[3][0] = COWBOY;
+        monde[4][1] = COWBOY;
         return monde;
         
     }
    
 
-    int[][] mouvement(char c, int positionX, int positionY, int[][] monde){
-        if(c == NORD){
+    int[][] mouvement(String c, int positionX, int positionY, int[][] monde){
+        if(equals(c,NORD)){
             monde[positionX][positionY] = VIDE;
             monde[positionX-1][positionY] = COWBOY;
         }
-        if(c == SUD){
+        if(equals(c,SUD)){
             monde[positionX][positionY] = VIDE;
             monde[positionX+1][positionY] = COWBOY;
         }
-        if(c == OUEST){
+        if(equals(c,OUEST)){
             monde[positionX][positionY] = VIDE;
             monde[positionX][positionY-1] = COWBOY;
         }
-        if(c == EST){
+        if(equals(c,EST)){
             monde[positionX][positionY] = VIDE;
             monde[positionX][positionY+1] = COWBOY;
         }
@@ -205,7 +255,6 @@ class RueeVersLOr extends Program{
     }
 
     void afficher(int[][] tab){
-        println("C = COWBOY     M = MONSTRE     ■ = MURS     □ = COFFRE A BUTIN     ? = BONUS");
         afficherHaut(tab);
         for(int c = 0;c<length(tab,1);c++){
             afficherContenue(tab,c);
@@ -213,6 +262,7 @@ class RueeVersLOr extends Program{
                 afficherBas(tab);
             }else{afficherligne(tab);}
         }
+        println("C = COWBOY     M = MONSTRE     ■ = MURS     □ = COFFRE A BUTIN     ? = BONUS");
         println("aller nord : z");
         println("aller ouest : q");
         println("aller est : d");
@@ -226,6 +276,11 @@ class RueeVersLOr extends Program{
     
     int MONSTREPV;
     int COWBOYPV;
+
+    void combat(){
+        clear();
+        afficherCombat();
+    }
 
     void InitialisationPV(){
         MONSTREPV = 10;
