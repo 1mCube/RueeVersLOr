@@ -289,4 +289,82 @@ class RueeVersLOr extends Program{
         File combat = newFile("resources/combat.txt");
         dump(combat);
     }
+
+    String choisirArme(){
+        String difficulte="";
+        println("--- Quel arme choisir ?---");
+        println("--- 1.Revolver - 1 de dégât - (questions faciles)---");
+        println("--- 2.Fusil - 2 de dégâts - (questions moyennes)---");
+        println("--- 3.Canon scié - 3 de dégâts - (questions difficiles)---");
+
+        int choix = readInt();
+        if (choix == 1){
+            difficulte="facile";
+        }else if (choix == 2){
+            difficulte="moyen";
+        }else if (choix == 3){
+            difficulte="difficile";
+        } else {
+            println("Choisir un chiffre entre 1 et 3");
+            choisirArme();
+        }
+        return difficulte;
+    }
+
+    Question tirerQuestion(String difficulteVoulue) {
+        //Choix d'un thème au hasard.
+        String[] themes = new String[]{"maths", "francais", "histoire", "anglais"};
+        String themeAleatoire = themes[(int) (random() * length(themes))];
+        CSVFile fichier = loadCSV("resources/questions.csv", ';');    
+        //Comptage du nombre de questions pour pouvoir la tirée.
+        int nbMatch = 0;
+        for (int i = 0; i < rowCount(fichier); i++) {
+            if (equals(getCell(fichier, i, 6), themeAleatoire) && equals(getCell(fichier, i, 7), difficulteVoulue)) {
+                nbMatch++;
+            }
+        }
+        if (nbMatch == 0) return null;
+        //On en tire une au sort.
+        int indexChoisi = (int) (random() * nbMatch);
+        int compteur = 0;
+        for (int i = 0; i < rowCount(fichier); i++) {
+            if (equals(getCell(fichier, i, 6), themeAleatoire) && equals(getCell(fichier, i, 7), difficulteVoulue)) {
+                if (compteur == indexChoisi) {
+                    Question q = new Question();
+                    q.id = stringToInt(getCell(fichier, i, 0));
+                    q.texte = getCell(fichier, i, 1);
+                    q.reponses = new String[]{getCell(fichier, i, 2), getCell(fichier, i, 3), getCell(fichier, i, 4)};
+                    q.bonneReponse = stringToInt(getCell(fichier, i, 5));
+                    q.theme = getCell(fichier, i, 6);
+                    q.difficulte = getCell(fichier, i, 7);
+                    return q;
+                }
+                compteur++;
+            }
+        }
+        return null;
+    }
+
+    boolean poserQuestion(Question q) {
+        //on pose la question dans le terminal
+        println("\n----------------------------------------");
+        println(q.texte);
+        println("----------------------------------------");
+        println("1. " + q.reponses[0]);
+        println("2. " + q.reponses[1]);
+        println("3. " + q.reponses[2]);
+        println("----------------------------------------"); 
+        print("Ta réponse : ");
+        int choix = readInt();
+        
+        if (choix == q.bonneReponse) {
+            println("JUSTE !");
+            return true;
+        } else {
+            println("FAUX ! La réponse était : " + q.reponses[q.bonneReponse - 1]);
+            return false;
+        }
+    }
+
+
 }
