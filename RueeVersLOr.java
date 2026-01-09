@@ -19,7 +19,7 @@ class RueeVersLOr extends Program{
     int monde[][];
 
     void algorithm(){
-        //connection
+        ecranConnexion();
         menu();
     }
 
@@ -67,7 +67,7 @@ class RueeVersLOr extends Program{
     }
 
     void afficherMenu(){
-        File menu = newFile("resources/menu.txt");
+        File menu = newFile("ressources/menu.txt");
         dump(menu);
     }
 
@@ -285,7 +285,7 @@ class RueeVersLOr extends Program{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     int MONSTREPV;
-    int COWBOYPV = 10;
+    int COWBOYPV;
     int DAMAGE;
 
     void combat(){
@@ -311,7 +311,7 @@ class RueeVersLOr extends Program{
         MONSTREPV = 10;
     }
     void afficherCombat(){
-        File combat = newFile("resources/combat.txt");
+        File combat = newFile("ressources/combat.txt");
         dump(combat);
     }
 
@@ -344,7 +344,7 @@ class RueeVersLOr extends Program{
     Question tirerQuestion(String difficulteVoulue) {
         //Choix d'un thème au hasard.
         String themeAleatoire = themes[(int) (random() * length(themes))];
-        CSVFile fichier = loadCSV("resources/questions.csv", ';');    
+        CSVFile fichier = loadCSV("ressources/questions.csv", ';');    
         //Comptage du nombre de questions pour pouvoir la tirée.
         int nbMatch = 0;
         for (int i = 0; i < rowCount(fichier); i++) {
@@ -395,5 +395,94 @@ class RueeVersLOr extends Program{
         }
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////    -/Système d'inscription/connexion/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    String PSEUDO_ACTUEL = "";
+
+    void ecranConnexion() {
+        println("===Bienvenue dans la Quête de La Ruée Vers L'Or Cowboy !===");
+        println("1. Connexion");
+        println("2. Inscription");
+
+        int choix = readInt();
+        if (choix == 1) {
+            connexion();
+        } else if (choix == 2) {
+            inscription();
+        } else {
+            println("Veuillez choisir un chiffre entre 1 et 2");
+            ecranConnexion();
+        }
+    }
+
+    boolean verifierIdentifiants(String pseudo, String mdp) {
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        if (f == null) return false;
+        for (int i = 0; i < rowCount(f); i++) {
+            // Colonne 0 = pseudo / Colonne 1 = mdp
+            if (equals(getCell(f, i, 0), pseudo) && equals(getCell(f, i, 1), mdp)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void connexion() {
+        boolean reussi = false;
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        while (!reussi) {
+            print("Pseudo : ");
+            String pseudo = readString();
+            print("Mot de passe : ");
+            String motdepasse = readString();
+        
+            if (verifierIdentifiants(pseudo, motdepasse)) {
+                println("Connexion réussie ! Bonjour " + pseudo);
+                PSEUDO_ACTUEL = pseudo;
+                for (int i=0; i<rowCount(f) ;i++){
+                    if(equals(getCell(f, i, 0),pseudo)){
+                        COWBOYPV = stringToInt(getCell(f, i, 3));
+                    }
+                }
+                reussi = true;
+            } else {
+                println("Pseudo ou mot de passe incorrect. Réessayez.");
+            }
+        }
+    }
+
+    void inscription() {
+        print("Choisissez un pseudo : ");
+        String pseudo = readString();
+        print("Choisissez un mot de passe : ");
+        String mdp = readString();
+        //Charger le CSV existant
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        int nbLignesExistantes = 0;
+        if (f != null) {
+            nbLignesExistantes = rowCount(f);
+        }
+        //Créer le nouveau tableau (qui remplace l'ancien CSV)
+        String[][] nouveauContenu = new String[nbLignesExistantes + 1][4];
+        //Recopier les anciens joueurs
+        for (int i = 0; i < nbLignesExistantes; i++) {
+            nouveauContenu[i][0] = getCell(f, i, 0); // Pseudo
+            nouveauContenu[i][1] = getCell(f, i, 1); // MDP
+            nouveauContenu[i][2] = getCell(f, i, 2); // Score 
+            nouveauContenu[i][3] = getCell(f, i, 3); // PV
+        }
+        //Ajouter le nouveau joueur à la toute dernière ligne
+        nouveauContenu[nbLignesExistantes][0] = pseudo;
+        nouveauContenu[nbLignesExistantes][1] = mdp;
+        nouveauContenu[nbLignesExistantes][2] = "0";
+        nouveauContenu[nbLignesExistantes][3] = "5"; 
+        //Sauvegarder (écrase et remplace par le CSV)
+        saveCSV(nouveauContenu, "ressources/joueurs.csv", ';');
+        PSEUDO_ACTUEL = pseudo;
+        COWBOYPV = 5;
+        println("Inscription réussie ! Bienvenue en ville, " + pseudo);
+    }
 
 }
