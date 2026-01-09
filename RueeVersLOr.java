@@ -85,22 +85,31 @@ class RueeVersLOr extends Program{
             if(equals(coup,NORD)){
                 if(pos[0]>0 && monde[pos[0]-1][pos[1]] == MONSTRE){
                     modeCombat = true;
-                }
-            }if(equals(coup,SUD)){
+                }else{mouvement(coup,pos[0],pos[1],monde);
+                    clear();
+                    afficher(monde);
+            }
+            }else if(equals(coup,SUD)){
                 if(pos[0]<length(monde,1)-1 && monde[pos[0]+1][pos[1]] == MONSTRE){
                     modeCombat = true;
-                }
-            }if(equals(coup,OUEST)){
+                }else{mouvement(coup,pos[0],pos[1],monde);
+                    clear();
+                    afficher(monde);
+            }
+            }else if(equals(coup,OUEST)){
                 if(pos[1]>0 && monde[pos[0]][pos[1]-1] == MONSTRE){
                     modeCombat = true;
-                }
-            }if(equals(coup,EST)){
+                }else{mouvement(coup,pos[0],pos[1],monde);
+                    clear();
+                    afficher(monde);
+            }
+            }else if(equals(coup,EST)){
                 if(pos[1]<length(monde,2)-1 && monde[pos[0]][pos[1]+1] == MONSTRE){
                     modeCombat = true;
-                }
-            }else{mouvement(coup,pos[0],pos[1],monde);
-            clear();
-            afficher(monde);}
+                }else{mouvement(coup,pos[0],pos[1],monde);
+                    clear();
+                    afficher(monde);}
+            }
         }
         if(modeCombat){
             combat();
@@ -275,7 +284,7 @@ class RueeVersLOr extends Program{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     int MONSTREPV;
-    int COWBOYPV;
+    int COWBOYPV = 10;
 
     void combat(){
         clear();
@@ -311,9 +320,10 @@ class RueeVersLOr extends Program{
         return difficulte;
     }
 
+    String[] themes = new String[]{"maths", "francais", "histoire", "anglais"};
+
     Question tirerQuestion(String difficulteVoulue) {
         //Choix d'un thème au hasard.
-        String[] themes = new String[]{"maths", "francais", "histoire", "anglais"};
         String themeAleatoire = themes[(int) (random() * length(themes))];
         CSVFile fichier = loadCSV("resources/questions.csv", ';');    
         //Comptage du nombre de questions pour pouvoir la tirée.
