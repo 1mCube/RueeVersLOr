@@ -276,12 +276,9 @@ class RueeVersLOr extends Program{
             }else{afficherligne(tab);}
         }
         println("C = COWBOY     M = MONSTRE     ■ = MURS     □ = COFFRE A BUTIN     ? = BONUS");
-        println("aller nord : z");
-        println("aller ouest : q");
-        println("aller est : d");
-        println("aller sud : s");
-        println("changer de niveau : x");
-
+        println("aller nord : z     aller ouest : q     aller est : d     aller sud : s     changer de niveau : x");
+        print("VOS PV : ");
+        afficherPV(COWBOYPV);
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////    -/Système de Combat/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,12 +286,25 @@ class RueeVersLOr extends Program{
     
     int MONSTREPV;
     int COWBOYPV = 10;
+    int DAMAGE;
 
     void combat(){
         clear();
+        InitialisationPV();
         afficherCombat();
-        sleep(5000);
-        monde();
+        while(MONSTREPV > 0){
+            String arme = choisirArme();
+            if(poserQuestion(tirerQuestion(arme))){
+                MONSTREPV = MONSTREPV - DAMAGE;
+            }else{COWBOYPV = COWBOYPV - 1;}
+        }
+    }
+
+    void afficherPV(int pv){
+        for(int cpt = 0;cpt<pv;cpt++){
+            print("❤︎");
+        }
+        println();
     }
 
     void InitialisationPV(){
@@ -315,10 +325,13 @@ class RueeVersLOr extends Program{
         int choix = readInt();
         if (choix == 1){
             difficulte="facile";
+            DAMAGE = 1;
         }else if (choix == 2){
             difficulte="moyen";
+            DAMAGE = 2;
         }else if (choix == 3){
             difficulte="difficile";
+            DAMAGE = 3;
         } else {
             println("Choisir un chiffre entre 1 et 3");
             choisirArme();
@@ -350,7 +363,7 @@ class RueeVersLOr extends Program{
                     q.id = stringToInt(getCell(fichier, i, 0));
                     q.texte = getCell(fichier, i, 1);
                     q.reponses = new String[]{getCell(fichier, i, 2), getCell(fichier, i, 3), getCell(fichier, i, 4)};
-                    q.bonneReponse = stringToInt(getCell(fichier, i, 5));
+                    q.bonneReponse = getCell(fichier, i, 5);
                     q.theme = getCell(fichier, i, 6);
                     q.difficulte = getCell(fichier, i, 7);
                     return q;
@@ -366,18 +379,18 @@ class RueeVersLOr extends Program{
         println("\n----------------------------------------");
         println(q.texte);
         println("----------------------------------------");
-        println("1. " + q.reponses[0]);
-        println("2. " + q.reponses[1]);
-        println("3. " + q.reponses[2]);
+        println("A. " + q.reponses[0]);
+        println("B. " + q.reponses[1]);
+        println("C. " + q.reponses[2]);
         println("----------------------------------------"); 
         print("Ta réponse : ");
-        int choix = readInt();
+        String choix = readString();
         
-        if (choix == q.bonneReponse) {
+        if (equals(choix,q.bonneReponse)) {
             println("JUSTE !");
             return true;
         } else {
-            println("FAUX ! La réponse était : " + q.reponses[q.bonneReponse - 1]);
+            println("FAUX ! La réponse était : " + q.bonneReponse );
             return false;
         }
     }
