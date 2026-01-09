@@ -84,6 +84,7 @@ class RueeVersLOr extends Program{
             String coup = saisie(monde,pos);
             if(equals(coup,NORD)){
                 if(pos[0]>0 && monde[pos[0]-1][pos[1]] == MONSTRE){
+                    mouvement(coup,pos[0],pos[1],monde);
                     modeCombat = true;
                 }else{mouvement(coup,pos[0],pos[1],monde);
                     clear();
@@ -91,6 +92,7 @@ class RueeVersLOr extends Program{
             }
             }else if(equals(coup,SUD)){
                 if(pos[0]<length(monde,1)-1 && monde[pos[0]+1][pos[1]] == MONSTRE){
+                    mouvement(coup,pos[0],pos[1],monde);
                     modeCombat = true;
                 }else{mouvement(coup,pos[0],pos[1],monde);
                     clear();
@@ -98,6 +100,7 @@ class RueeVersLOr extends Program{
             }
             }else if(equals(coup,OUEST)){
                 if(pos[1]>0 && monde[pos[0]][pos[1]-1] == MONSTRE){
+                    mouvement(coup,pos[0],pos[1],monde);
                     modeCombat = true;
                 }else{mouvement(coup,pos[0],pos[1],monde);
                     clear();
@@ -105,6 +108,7 @@ class RueeVersLOr extends Program{
             }
             }else if(equals(coup,EST)){
                 if(pos[1]<length(monde,2)-1 && monde[pos[0]][pos[1]+1] == MONSTRE){
+                    mouvement(coup,pos[0],pos[1],monde);
                     modeCombat = true;
                 }else{mouvement(coup,pos[0],pos[1],monde);
                     clear();
@@ -289,6 +293,8 @@ class RueeVersLOr extends Program{
     void combat(){
         clear();
         afficherCombat();
+        sleep(5000);
+        monde();
     }
 
     void InitialisationPV(){
