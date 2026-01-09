@@ -46,7 +46,10 @@ class RueeVersLOr extends Program{
                 monde();
                 valide = true;
             }else if(choix == 2){
-                //redirige vers le marchand
+                File marchand = newFile("ressources/marchand.txt");
+                dump(marchand);
+                sleep(3000);
+                marchand();
                 valide = true;
             }else if(choix == 3){
                 //affiche le leaderboard
@@ -454,12 +457,23 @@ class RueeVersLOr extends Program{
     }
 
     void inscription() {
-        print("Choisissez un pseudo : ");
-        String pseudo = readString();
-        print("Choisissez un mot de passe : ");
-        String mdp = readString();
         //Charger le CSV existant
         CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        print("Choisissez un pseudo : ");
+        String pseudo = readString();
+        if (f !=null){
+            for(int i = 0; i < rowCount(f); i++){
+                if (equals(getCell(f, i, 0), pseudo)) {
+                    println("ERREUR : Ce pseudo est déjà utilisé par un autre cowboy !");
+                    println("Veuillez en choisir un autre.");
+                    inscription();
+                    return;
+                }
+            }
+        }
+        
+        print("Choisissez un mot de passe : ");
+        String mdp = readString();
         int nbLignesExistantes = 0;
         if (f != null) {
             nbLignesExistantes = rowCount(f);
@@ -472,17 +486,85 @@ class RueeVersLOr extends Program{
             nouveauContenu[i][1] = getCell(f, i, 1); // MDP
             nouveauContenu[i][2] = getCell(f, i, 2); // Score 
             nouveauContenu[i][3] = getCell(f, i, 3); // PV
+            nouveauContenu[i][4] = getCell(f, i, 4); // Or
         }
         //Ajouter le nouveau joueur à la toute dernière ligne
         nouveauContenu[nbLignesExistantes][0] = pseudo;
         nouveauContenu[nbLignesExistantes][1] = mdp;
         nouveauContenu[nbLignesExistantes][2] = "0";
-        nouveauContenu[nbLignesExistantes][3] = "5"; 
+        nouveauContenu[nbLignesExistantes][3] = "5";
+        nouveauContenu[nbLignesExistantes][4] = "0";
         //Sauvegarder (écrase et remplace par le CSV)
         saveCSV(nouveauContenu, "ressources/joueurs.csv", ';');
         PSEUDO_ACTUEL = pseudo;
         COWBOYPV = 5;
         println("Inscription réussie ! Bienvenue en ville, " + pseudo);
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////    -/MARCHAND/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void marchand() {
+        clear();
+        println("----------------------------------------------------------------------------------------------------------------------------------------");
+        println("Le marchand vous propose : +1 PV Max définitif");
+        println("Prix : 10 Gold");
+        println("1. Acheter");
+        println("2. Partir");
 
+        int choix = readInt();
+
+        if (choix == 1) {
+            // Charger le fichier CSV
+            CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+            if (f == null) return;
+
+            int nbLignes = rowCount(f);
+            String[][] nouveauContenu = new String[nbLignes][5];
+            boolean achatReussi = false;
+
+            //Parcourir pour trouver le bon compte
+            for (int i = 0; i < nbLignes; i++) {
+                nouveauContenu[i][0] = getCell(f, i, 0); 
+                nouveauContenu[i][1] = getCell(f, i, 1);
+                nouveauContenu[i][2] = getCell(f, i, 2); // Score (Colonne 2)
+
+                if (equals(getCell(f, i, 0), PSEUDO_ACTUEL)) {
+                    // On récupère les PV et l'or
+                    int pvActuels = stringToInt(getCell(f, i, 3));
+                    int goldActuel = stringToInt(getCell(f, i, 4));
+
+                    if (goldActuel >= 10) {
+                        nouveauContenu[i][3] = "" + (pvActuels + 1); // PV + 1
+                        nouveauContenu[i][4] = "" + (goldActuel - 10); // Gold - 10
+                        COWBOYPV = pvActuels + 1;
+                        
+                        achatReussi = true;
+                        println("Achat effectué ! Tes PV Max passent à " + nouveauContenu[i][3]);
+                    } else {
+                        println("Pas assez de Gold ! Il te faut 10 pièces.");
+                        sleep(2000);
+                        clear();
+                        marchand();
+                        nouveauContenu[i][3] = getCell(f, i, 3);
+                        nouveauContenu[i][4] = getCell(f, i, 4);
+                    }
+                } else {
+                    // Pour les autres on recopie tel quel
+                    nouveauContenu[i][3] = getCell(f, i, 3);
+                    nouveauContenu[i][4] = getCell(f, i, 4);
+                }
+            }
+            //Sauvegarder si l'or a été dépensé
+            if (achatReussi) {
+                saveCSV(nouveauContenu, "ressources/joueurs.csv", ';');
+                println("Autre chose ?");
+                marchand();
+            }
+        }else if(choix == 2){
+            println("A la prochaine !");
+            sleep(2000);
+            clear();
+            menu();
+        }
+    }
 }
