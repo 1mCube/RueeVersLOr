@@ -277,8 +277,7 @@ class RueeVersLOr extends Program{
         }
         println("C = COWBOY     M = MONSTRE     ■ = MURS     □ = COFFRE A BUTIN     ? = BONUS");
         println("aller nord : z     aller ouest : q     aller est : d     aller sud : s     changer de niveau : x");
-        print("VOS PV : ");
-        afficherPV(COWBOYPV);
+        afficherPVCowboy(COWBOYPV);
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////    -/Système de Combat/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,16 +290,17 @@ class RueeVersLOr extends Program{
     void combat(){
         clear();
         InitialisationPV();
-        afficherCombat();
         while(MONSTREPV > 0){
+            afficherCombat();
+            afficherPVCowboy(COWBOYPV);
             String arme = choisirArme();
             if(poserQuestion(tirerQuestion(arme))){
                 MONSTREPV = MONSTREPV - DAMAGE;
             }else{COWBOYPV = COWBOYPV - 1;}
         }
     }
-
-    void afficherPV(int pv){
+    void afficherPVCowboy(int pv){
+        print("VOS PV : ");
         for(int cpt = 0;cpt<pv;cpt++){
             print("❤︎");
         }
