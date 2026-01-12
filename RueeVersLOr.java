@@ -479,7 +479,7 @@ class RueeVersLOr extends Program{
             nbLignesExistantes = rowCount(f);
         }
         //Créer le nouveau tableau (qui remplace l'ancien CSV)
-        String[][] nouveauContenu = new String[nbLignesExistantes + 1][4];
+        String[][] nouveauContenu = new String[nbLignesExistantes + 1][5];
         //Recopier les anciens joueurs
         for (int i = 0; i < nbLignesExistantes; i++) {
             nouveauContenu[i][0] = getCell(f, i, 0); // Pseudo
@@ -510,6 +510,7 @@ class RueeVersLOr extends Program{
         println("Prix : 10 Gold");
         println("1. Acheter");
         println("2. Partir");
+        println("Gold : " + afficherGold());
 
         int choix = readInt();
 
@@ -526,7 +527,7 @@ class RueeVersLOr extends Program{
             for (int i = 0; i < nbLignes; i++) {
                 nouveauContenu[i][0] = getCell(f, i, 0); 
                 nouveauContenu[i][1] = getCell(f, i, 1);
-                nouveauContenu[i][2] = getCell(f, i, 2); // Score (Colonne 2)
+                nouveauContenu[i][2] = getCell(f, i, 2);
 
                 if (equals(getCell(f, i, 0), PSEUDO_ACTUEL)) {
                     // On récupère les PV et l'or
@@ -537,9 +538,11 @@ class RueeVersLOr extends Program{
                         nouveauContenu[i][3] = "" + (pvActuels + 1); // PV + 1
                         nouveauContenu[i][4] = "" + (goldActuel - 10); // Gold - 10
                         COWBOYPV = pvActuels + 1;
-                        
                         achatReussi = true;
+                        clear();
+                        println("------------------------");
                         println("Achat effectué ! Tes PV Max passent à " + nouveauContenu[i][3]);
+                        sleep(2000);
                     } else {
                         println("Pas assez de Gold ! Il te faut 10 pièces.");
                         sleep(2000);
@@ -566,5 +569,33 @@ class RueeVersLOr extends Program{
             clear();
             menu();
         }
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////      -/Afficher score/gold/-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    int afficherScore(){
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        int nbLignes = rowCount(f);
+        int score = 0;
+        for (int i = 0; i < nbLignes; i++) {
+            if (equals(getCell(f, i, 0), PSEUDO_ACTUEL)) {
+                score = stringToInt(getCell(f,i,2));
+            }
+        }
+        return score;
+    }
+
+        int afficherGold(){
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        int nbLignes = rowCount(f);
+        int score = 0;
+        for (int i = 0; i < nbLignes; i++) {
+            if (equals(getCell(f, i, 0), PSEUDO_ACTUEL)) {
+                score = score + stringToInt(getCell(f,i,4));
+            }
+        }
+        return score;
     }
 }
