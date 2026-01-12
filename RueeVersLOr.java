@@ -7,7 +7,6 @@ class RueeVersLOr extends Program{
     final int MONSTRE = 2;
     final int MURS = 3;
     final int COFFRE = 4;
-    final int BONUS = 5;
 
     final String NORD = "z";
     final String SUD = "s";
@@ -19,12 +18,22 @@ class RueeVersLOr extends Program{
     int monde[][];
 
     void algorithm(){
+        clear();
         ecranConnexion();
+        sleep(500);
+        clear();
+        histoirejeux();
+        sleep(8000);
         menu();
     }
 
     void clear(){
         print("\033[H\033[2J");
+    }
+
+    void histoirejeux(){
+        File histoire = newFile("ressources/histoire.txt");
+        dump(histoire);
     }
     
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +162,6 @@ class RueeVersLOr extends Program{
         }
         return coup;
     }
-    
     int[][] generationMonde(){
         int[][] monde = new int[7][10];
         double monstre = 0.1;
@@ -172,7 +180,7 @@ class RueeVersLOr extends Program{
                 }else{monde[c][l] = VIDE;}
             }
         }
-        monde[4][1] = COWBOY;
+        monde[3][0] = COWBOY;
         return monde;
         
     }
@@ -265,8 +273,6 @@ class RueeVersLOr extends Program{
             print("■");
         }else if(nb == COFFRE){
             print("□");
-        }else if(nb == BONUS){
-            print("?");
         }
     }
 
@@ -278,8 +284,9 @@ class RueeVersLOr extends Program{
                 afficherBas(tab);
             }else{afficherligne(tab);}
         }
-        println("C = COWBOY     M = MONSTRE     ■ = MURS     □ = COFFRE A BUTIN     ? = BONUS");
+        println("C = COWBOY     M = MONSTRE     ■ = MURS     □ = COFFRE A BUTIN");
         println("aller nord : z     aller ouest : q     aller est : d     aller sud : s     changer de niveau : x");
+        println("VOTRE SCORE : " + SCORE);
         afficherPVCowboy(COWBOYPV);
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,21 +300,54 @@ class RueeVersLOr extends Program{
     void combat(){
         clear();
         InitialisationPV();
-        while(MONSTREPV > 0){
+        int PVRun = COWBOYPV;
+        while(MONSTREPV > 0 && !perdu(PVRun)){
+            clear();
             afficherCombat();
-            afficherPVCowboy(COWBOYPV);
+            afficherPVMonstre(MONSTREPV);
+            print("       ");
+            afficherPVCowboy(PVRun);
             String arme = choisirArme();
             if(poserQuestion(tirerQuestion(arme))){
                 MONSTREPV = MONSTREPV - DAMAGE;
-            }else{COWBOYPV = COWBOYPV - 1;}
+            }else{PVRun = PVRun - 1;}
+       }
+        if(perdu(PVRun) && MONSTREPV > 0){
+            SCORE = SCORE - 5;
+            File mort = newFile("ressources/mort.txt");
+            dump(mort);
+            sleep(10000);
+            menu();
         }
+        SCORE = SCORE + gain();
+        monde();
     }
+
+    int gain(){
+        return (int) (random() * 5);
+    }
+
     void afficherPVCowboy(int pv){
         print("VOS PV : ");
         for(int cpt = 0;cpt<pv;cpt++){
             print("❤︎");
         }
         println();
+    }
+
+    void afficherPVMonstre(int pv){
+        print("PV DU MONSTRE : ");
+        for(int cpt = 0;cpt<pv;cpt++){
+            print("❤︎");
+        }
+    }
+
+    boolean perdu(int pv){
+        boolean var = false;
+        if(pv == 0){
+            var = true;
+        }
+        return var;
     }
 
     void InitialisationPV(){
