@@ -14,6 +14,7 @@ class RueeVersLOr extends Program{
     final String EST = "d";
     final String SORTIE = "x";
 
+    int GOLD;
     int SCORE;
     int monde[][];
 
@@ -45,7 +46,7 @@ class RueeVersLOr extends Program{
         afficherMenu();
         choixMenu();
     }
-    void choixMenu(){
+     void choixMenu(){
         boolean valide = false;
         int choix;
         while(!valide){
@@ -53,19 +54,24 @@ class RueeVersLOr extends Program{
             if(choix == 1){
                 monde = generationMonde();
                 monde();
-                valide = true;
+                valide = true; //Lance un niveau
             }else if(choix == 2){
                 File marchand = newFile("ressources/marchand.txt");
                 dump(marchand);
                 sleep(3000);
                 marchand();
-                valide = true;
+                valide = true; //Ouvre le marchand
             }else if(choix == 3){
-                //affiche le leaderboard
-                valide = true;
+                afficherLeaderboard();
+                valide = true; //Ouvre le leaderboard
             }else if(choix == 4){
-                //vers quitter
+                println("By : QUESNOY Simon & MICHEL Yohan");
+                sleep(2000);
+                clear();
+                println("----------------------------");
+                println("A bientôt Cowboy");
                 valide = true;
+                 //Arrête le jeu
             }
 
         }
@@ -319,7 +325,10 @@ class RueeVersLOr extends Program{
             sleep(10000);
             menu();
         }
+        GOLD = GOLD + gain();
         SCORE = SCORE + gain();
+        sauvegarderScore();
+        sauvegarderGold();
         monde();
     }
 
@@ -487,6 +496,7 @@ class RueeVersLOr extends Program{
                 for (int i=0; i<rowCount(f) ;i++){
                     if(equals(getCell(f, i, 0),pseudo)){
                         COWBOYPV = stringToInt(getCell(f, i, 3));
+                        SCORE = stringToInt(getCell(f, i, 2));
                     }
                 }
                 reussi = true;
@@ -612,7 +622,7 @@ class RueeVersLOr extends Program{
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////      -/Afficher score/gold/-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////      -/score/gold/leaderboard-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     int afficherScore(){
@@ -627,7 +637,7 @@ class RueeVersLOr extends Program{
         return score;
     }
 
-        int afficherGold(){
+    int afficherGold(){
         CSVFile f = loadCSV("ressources/joueurs.csv", ';');
         int nbLignes = rowCount(f);
         int score = 0;
@@ -638,4 +648,112 @@ class RueeVersLOr extends Program{
         }
         return score;
     }
+
+    void afficherLeaderboard() {
+        clear();
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        if (f == null || rowCount(f) <= 1) {
+            println("Aucun joueur enregistré pour le moment !");
+            return;
+        }
+        int nbJoueurs = rowCount(f);
+        int nbDonnees = nbJoueurs - 1; // -1 pour ignorer la 1ere ligne du CSV
+        // Met les pseudos et les scores dans des tableaux
+        String[] pseudos = new String[nbDonnees];
+        int[] scores = new int[nbDonnees];
+        for (int i = 1; i < nbJoueurs; i++) { // i = 1 pour ignorer la première ligne du CSV
+            int index = i - 1;
+            pseudos[index] = getCell(f, i, 0);
+            scores[index] = stringToInt(getCell(f, i, 2));
+        } 
+        // Tri du score décroissant (par bulle)
+        for (int i = 0; i < nbDonnees - 1; i++) {
+            for (int j = 0; j < nbDonnees - 1 - i; j++) {
+                if (scores[j] < scores[j + 1]) {
+                    int tempScore = scores[j];
+                    scores[j] = scores[j + 1];
+                    scores[j + 1] = tempScore;
+                    String tempPseudo = pseudos[j];
+                    pseudos[j] = pseudos[j + 1];
+                    pseudos[j + 1] = tempPseudo;
+                }
+            }
+        }
+        // Afficher le top 5
+        println("--------------------");
+        println("=== LEADERBOARD - TOP 5 ===");
+        int maxAffichage = (nbDonnees < 5) ? nbDonnees : 5;
+        for (int i = 0; i < maxAffichage; i++) {
+            println((i + 1) + ". " + pseudos[i] + " - " + scores[i] + " points");
+        }
+        // Trouve la place du joueur actuel
+        int place = -1;
+        for (int i = 0; i < nbDonnees; i++) {
+            if (equals(pseudos[i], PSEUDO_ACTUEL)) {
+                place = i + 1;
+                break;
+            }
+        }
+        println("-----");
+        if (place != -1) {
+            println("Votre place : " + place + ". " + PSEUDO_ACTUEL + " - " + scores[place - 1] + " points");
+        }
+        boolean valide = false;
+        while(!valide){
+            println("1. Quitter");
+            int choix = readInt();
+            if(choix == 1){
+                valide = true;
+                println("Allez trouver de l'or Cowboy");
+                sleep(3000);
+                clear();
+                menu();   
+            } else {
+                println("Veuillez entrer 1 pour quitter");
+            }
+        }
+    }
+
+    void sauvegarderScore() {
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        if (f == null) return;
+
+        int nbLignes = rowCount(f);
+        String[][] nouveauContenu = new String[nbLignes][5];
+
+        for (int i = 0; i < nbLignes; i++) {
+            nouveauContenu[i][0] = getCell(f, i, 0); // Pseudo
+            nouveauContenu[i][1] = getCell(f, i, 1); // MDP
+            nouveauContenu[i][2] = getCell(f, i, 2); // Score
+            nouveauContenu[i][3] = getCell(f, i, 3); // PV
+            nouveauContenu[i][4] = getCell(f, i, 4); // Gold
+
+            if (equals(getCell(f, i, 0), PSEUDO_ACTUEL)) {
+                nouveauContenu[i][2] = "" + SCORE; // Met à jour le score avec la valeur actuelle de SCORE
+            }
+        }
+        saveCSV(nouveauContenu, "ressources/joueurs.csv", ';');
+    }
+
+        void sauvegarderGold() {
+        CSVFile f = loadCSV("ressources/joueurs.csv", ';');
+        if (f == null) return;
+
+        int nbLignes = rowCount(f);
+        String[][] nouveauContenu = new String[nbLignes][5];
+
+        for (int i = 0; i < nbLignes; i++) {
+            nouveauContenu[i][0] = getCell(f, i, 0); // Pseudo
+            nouveauContenu[i][1] = getCell(f, i, 1); // MDP
+            nouveauContenu[i][2] = getCell(f, i, 2); // Score
+            nouveauContenu[i][3] = getCell(f, i, 3); // PV
+            nouveauContenu[i][4] = getCell(f, i, 4); // Gold
+
+            if (equals(getCell(f, i, 0), PSEUDO_ACTUEL)) {
+                nouveauContenu[i][4] = "" + GOLD; // Met à jour le score avec la valeur actuelle de GOLD
+            }
+        }
+        saveCSV(nouveauContenu, "ressources/joueurs.csv", ';');
+    }
+    
 }
