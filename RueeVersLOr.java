@@ -28,24 +28,26 @@ class RueeVersLOr extends Program{
         menu();
     }
 
+    // netoie le terminal
     void clear(){
         print("\033[H\033[2J");
     }
 
+    //affiche le synopsis 
     void histoirejeux(){
         File histoire = newFile("ressources/histoire.txt");
         dump(histoire);
     }
     
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////      -/MENU/-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////      -/MENU/-    //////////////////
 
     void menu(){
         clear();
         afficherMenu();
         choixMenu();
     }
+
+    // permet de choisir les options du menu
      void choixMenu(){
         boolean valide = false;
         int choix;
@@ -77,6 +79,7 @@ class RueeVersLOr extends Program{
         }
     }
 
+    //permet d'afficher le contenu d'un fichier .txt
     void dump(File file){
         int nblignes = 0;
         while(ready(file)){
@@ -84,15 +87,15 @@ class RueeVersLOr extends Program{
         }
     }
 
+    // affiche le menu
     void afficherMenu(){
         File menu = newFile("ressources/menu.txt");
         dump(menu);
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////   -/Initialisation du monde/-   /////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////   -/Initialisation du monde/-   //////////////
     
+    // gerer le déplacement dans le monde
     void monde(){
     	boolean modeCombat = false;
         clear();
@@ -138,6 +141,7 @@ class RueeVersLOr extends Program{
         }
     }
 
+    //verifie que la saisie est correct
     String saisie(int monde[][],int[] position){
         int positionX = position[0];
         int positionY = position[1];
@@ -168,6 +172,8 @@ class RueeVersLOr extends Program{
         }
         return coup;
     }
+
+    //initialise un monde de manière aléatoire
     int[][] generationMonde(){
         int[][] monde = new int[7][10];
         double monstre = 0.1;
@@ -190,8 +196,26 @@ class RueeVersLOr extends Program{
         return monde;
         
     }
-   
+    //verifie si la case voulu est un BUTIN
+    boolean VerifButin(String c, int[] pos, int[][] monde){
+        boolean butin = false;
+        if(equals(c,NORD)){
+                if(pos[0]>0 && monde[pos[0]-1][pos[1]] == COFFRE){
+                    butin = true;}
+        }else if(equals(c,SUD)){
+            if(pos[0]<length(monde,1)-1 && monde[pos[0]+1][pos[1]] == COFFRE){
+                    butin = true;}
+        }else if(equals(c,OUEST)){
+                if(pos[1]>0 && monde[pos[0]][pos[1]-1] == MONSTRE){
+                    butin = true;}
+        }else if(equals(c,EST)){
+                if(pos[1]<length(monde,2)-1 && monde[pos[0]][pos[1]+1] == MONSTRE){
+                    butin = true;}
+        }
+        return butin;
+    }
 
+    // deplace le cowboy d'un direction voulue
     int[][] mouvement(String c, int positionX, int positionY, int[][] monde){
         if(equals(c,NORD)){
             monde[positionX][positionY] = VIDE;
@@ -212,6 +236,7 @@ class RueeVersLOr extends Program{
         return monde;
     }
 
+    //retourne la position dans une liste à 2 valeur
     int[] positionJoueur(int monde[][]){
         int[] pos = new int[2];
         for(int x = 0;x<length(monde,1);x++){
@@ -224,9 +249,8 @@ class RueeVersLOr extends Program{
         }
         return pos;
     }
-// partie affichage du Jeux : //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////// partie affichage du Jeux : ///////////
+
     //affiche les ligne du tableau : ├───┼───┼───┼───┼───┼───┼───┼───┤
     void afficherligne(int[][] tab){
         print("├");
@@ -268,6 +292,7 @@ class RueeVersLOr extends Program{
             println();
     }
 
+    // permet d'affiche les Entité sur le tableau
     void afficherEntite(int nb){
         if(nb == VIDE){
             print(" ");
@@ -282,6 +307,7 @@ class RueeVersLOr extends Program{
         }
     }
 
+    //affiche tout le tableau avec les élément dedans
     void afficher(int[][] tab){
         afficherHaut(tab);
         for(int c = 0;c<length(tab,1);c++){
@@ -295,14 +321,15 @@ class RueeVersLOr extends Program{
         println("VOTRE SCORE : " + SCORE);
         afficherPVCowboy(COWBOYPV);
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////    -/Système de Combat/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////    -/Système de Combat/-   ////////////
+
     
     int MONSTREPV;
     int COWBOYPV;
     int DAMAGE;
 
+    // gerer le système de combat
     void combat(){
         clear();
         InitialisationPV();
@@ -332,10 +359,12 @@ class RueeVersLOr extends Program{
         monde();
     }
 
+    // retourne un chiffre aléatoirement entre 1 et 5
     int gain(){
         return (int) (random() * 5);
     }
 
+    //affiche les pv du cowboy
     void afficherPVCowboy(int pv){
         print("VOS PV : ");
         for(int cpt = 0;cpt<pv;cpt++){
@@ -343,14 +372,14 @@ class RueeVersLOr extends Program{
         }
         println();
     }
-
+    //affiche les pv du monstre
     void afficherPVMonstre(int pv){
         print("PV DU MONSTRE : ");
         for(int cpt = 0;cpt<pv;cpt++){
             print("❤︎");
         }
     }
-
+    // verifie que vous etes au dessus de 0 pv
     boolean perdu(int pv){
         boolean var = false;
         if(pv == 0){
@@ -358,15 +387,16 @@ class RueeVersLOr extends Program{
         }
         return var;
     }
-
+    // met la variable MONSTREPV a 10
     void InitialisationPV(){
         MONSTREPV = 10;
     }
+    // affiche le cowboy et le monstre dans un combat
     void afficherCombat(){
         File combat = newFile("ressources/combat.txt");
         dump(combat);
     }
-
+    //permet de choisir l'arme voule(choix de la difficulté)
     String choisirArme(){
         String difficulte="";
         println("--- Quel arme choisir ?---");
@@ -392,7 +422,7 @@ class RueeVersLOr extends Program{
     }
 
     String[] themes = new String[]{"maths", "francais", "histoire", "anglais"};
-
+    //permet de piocher aleatoirement un question dans le fichier CSV
     Question tirerQuestion(String difficulteVoulue) {
         //Choix d'un thème au hasard.
         String themeAleatoire = themes[(int) (random() * length(themes))];
@@ -425,7 +455,7 @@ class RueeVersLOr extends Program{
         }
         return null;
     }
-
+    //affiche la question et verifie que la réponse est bonne
     boolean poserQuestion(Question q) {
         //on pose la question dans le terminal
         println("\n----------------------------------------");
@@ -447,10 +477,8 @@ class RueeVersLOr extends Program{
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////    -/Système d'inscription/connexion/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+////    -/Système d'inscription/connexion/-   //////////////
+
     String PSEUDO_ACTUEL = "";
 
     void ecranConnexion() {
@@ -550,9 +578,9 @@ class RueeVersLOr extends Program{
         COWBOYPV = 5;
         println("Inscription réussie ! Bienvenue en ville, " + pseudo);
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////    -/MARCHAND/-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////    -/MARCHAND/-   //////////
+
     void marchand() {
         clear();
         println("----------------------------------------------------------------------------------------------------------------------------------------");
@@ -621,9 +649,7 @@ class RueeVersLOr extends Program{
         }
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////      -/score/gold/leaderboard-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////      -/score/gold/leaderboard-    ///////////////////
 
     int afficherScore(){
         CSVFile f = loadCSV("ressources/joueurs.csv", ';');
